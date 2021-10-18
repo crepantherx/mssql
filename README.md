@@ -6,6 +6,7 @@
 # SQL
 ## Trigger
 
-.
+```.
 └── SQL
     └── Trigger
+```
