@@ -79,3 +79,39 @@ FROM db.contactBackup
 CREATE CLUSTERED INDEX IX_contactBackup_phone ON db.contactBackup (phone ASC, name DESC)
 
 DROP INDEX db.contactBackup.IX_contactBackup_phone
+
+
+/*
+    Triggers
+*/
+Go
+
+CREATE TABLE db.audit (
+    id int,
+    message nvarchar(128)
+)
+
+ALTER TABLE db.audit 
+DROP COLUMN id
+
+Go
+
+ALTER TRIGGER db.tr_contactBackup_ForInsert ON db.contactBackup FOR INSERT AS
+BEGIN
+    DECLARE @name varchar(20)
+    DECLARE @phone BIGINT
+    
+    SELECT @name = name FROM inserted
+    SELECT @phone = phone FROM inserted
+
+    INSERT INTO db.audit VALUES
+    ('A new contact '+ CAST(@phone AS nvarchar(20)) + ' has been added with the name of "' + @name + '"')
+END
+
+INSERT INTO db.contactBackup VALUES 
+(8586777, 'steven')
+
+select * from db.audit
+
+
+select * from inserted
