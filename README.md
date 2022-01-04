@@ -2,6 +2,7 @@
 
 ```
 @project	SQL
-@author		Sudhir Singh crepantherx@gmail.com
+@author		Sudhir Singh 
+@email    crepantherx@gmail.com
 @version	1.1
 ```
