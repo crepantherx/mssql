@@ -1,0 +1,173 @@
+--CREATE DATABASE
+
+CREATE DATABASE DbCreate;
+
+DROP DATABASE DbCreate;
+
+--CREATE TABLE
+
+CREATE TABLE TbCreate (    	
+Id int,Name varchar(50),Sur_name varchar(50),Dept varchar(20),Gender varchar(20)
+);
+
+
+INSERT INTO TbCreate VALUES(1,'siri','shah','HR','Female'),
+(2,'sam','singh','engg','male'),(3,'ash','gupta','management','male'),
+(4,'sumit','sen','HR','male')
+
+
+DROP TABLE TbCreate;
+
+SELECT * FROM TbCreate;
+
+--CREATING TABLE USING CONSTRAINTS
+
+CREATE TABLE ConstCreate (    	
+P_Id int NOT NULL PRIMARY KEY,
+Name varchar(50) NOT NULL UNIQUE,
+Sur_name varchar(50),
+Dept varchar(20),
+Gender varchar(20),
+Age int CHECK(Age>18),
+City varchar(50) DEFAULT 'Agra'
+);
+
+INSERT INTO ConstCreate VALUES(1,'siri','shah','HR','Female',19,'lucknow'),
+(2,'sam','singh','engg','male',19,'karnatka'),(3,'ash','gupta','management','male',20,'agra'),
+(4,'sumit','sen','HR','male',21,'delhi')
+
+
+SELECT * FROM ConstCreate
+
+
+
+CREATE TABLE TbOrder(    	
+O_Id int IDENTITY(1,1) PRIMARY KEY,
+FirstName varchar(50) NOT NULL,
+Last_name varchar(50),
+Dept varchar(20),
+Gender varchar(20),
+FOREIGN KEY(O_Id) REFERENCES ConstCreate(P_Id)
+);
+
+INSERT INTO TbOrder VALUES('akash','shah','engg','male'),
+('saam','sngh','HR','Female'),('asha','guta','management','Female'),
+('sumita','seni','HR','male')
+
+SELECT * FROM TbOrder
+
+DROP TABLE TbOrder
+DROP TABLE ConstCreate
+
+
+--CREATING AN INDEX ON TABLE
+CREATE INDEX IX_ConstCreate_Name
+ON ConstCreate(Name)
+
+
+DROP INDEX ConstCreate.IX_ConstCreate_Name
+
+
+--CREATING STORED PROCEDURE
+	--WITHOUT PARAMETERS
+
+CREATE PROCEDURE Pr_ConstCreate
+AS
+BEGIN
+	SELECT * FROM ConstCreate
+END
+
+DROP PROCEDURE Pr_ConstCreate
+
+
+--CREATING SP WITH PARAMETERS
+
+CREATE PROC Pr_Para_ConstCreate_Gender
+@Gender varchar(30)
+AS
+BEGIN
+	SELECT * FROM ConstCreate
+	WHERE Gender=@Gender
+END
+
+EXEC PROC Pr_Para_ConstCreate_Gender Gender='Male'
+
+DROP PROC Pr_Para_ConstCreate_Gender
+
+--CREATE VIEW
+
+CREATE VIEW Vw_TbOrderByName
+AS
+	SELECT FirstName,Last_Name
+	FROM TbOrder
+	WHERE Gender='Female'
+
+	DROP VIEW Vw_TbOrderByName
+
+
+	--CREATE INDEX VIEW 
+
+	use master
+
+CREATE VIEW IX_Productview_PNAME
+WITH SchemaBinding
+AS
+SELECT PNAME,SUM(ISNULL((QUANTITY_SOLD*UNITPRICE),0)) AS TOTALSALES,COUNT_BIG(*) AS 
+TOTALTRANSACTION FROM dbo.PRODUCTSALES JOIN dbo.PRODUCT ON dbo.PRODUCT.Pid=dbo.PRODUCTSALES.Pid
+GROUP BY PNAME
+
+SELECT * FROM PRODUCT
+SELECT * FROM PRODUCTSALES
+
+--INDEX ON VIEW
+CREATE UNIQUE CLUSTERED INDEX UIX_IX_Productview_PNAME ON IX_Productview_PNAME(PNAME)
+
+
+SELECT * FROM PRODUCTSALES;
+SELECT * FROM PRODUCT;
+SELECT * FROM IX_Productview_PNAME
+
+DROP VIEW IX_Productview_PNAME
+
+
+
+--CREATE TRIGGER
+
+CREATE TABLE CUSTOMER(ID INT,NAME NVARCHAR(20),SALARY NVARCHAR(50),GENDER NVARCHAR(20),DEPTID INT)
+
+INSERT INTO CUSTOMER VALUES(1,'SARA','2000','FEMALE',3),(2,'SIRI','2500','FEMALE',4),(3,'SAM','3000','MALE',2),
+(4,'SOM','4500','MALE',1),(5,'JIMMY','4000','FEMALE',3),(6,'JON','5000','MALE',2)
+
+
+CREATE TABLE CUSTOMERAUDIT(ID INT IDENTITY(1,1) ,AUDITDATE NVARCHAR(50))
+
+DROP TABLE CUSTOMERAUDIT
+DROP TABLE CUSTOMER
+
+SELECT * FROM CUSTOMER
+SELECT * FROM CUSTOMERAUDIT
+
+CREATE TRIGGER Tr_CUSTOMER_INSERT_ID
+ON CUSTOMER
+FOR INSERT
+AS
+BEGIN
+	DECLARE @ID INT
+	SELECT @ID=ID FROM INSERTED
+	INSERT INTO CUSTOMERAUDIT VALUES('NEW EMP WITH ID= ' + CAST(@ID AS NVARCHAR(5))+'IS ADDED AT' + CAST(GETDATE()AS NVARCHAR(20)))
+END
+
+DROP TRIGGER Tr_CUSTOMER_INSERT_ID
+
+INSERT INTO CUSTOMER VALUES(11,'HARSHIT','5600','MALE',3)
+INSERT INTO CUSTOMER VALUES(12,'ARSHI','5300','FEMALE',2)
+
+
+
+FEEDBACK
+
+
+
+
+
+
