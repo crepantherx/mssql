@@ -127,6 +127,7 @@ create table #t6(
 select name from tempdb..sysobjects
 where name like '#t6%';
 
+--procedure
 
 
 
