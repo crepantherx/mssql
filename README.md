@@ -1,12 +1,6 @@
 ```
-@project	SQL is hard for some people
+@project	SQL
 @author		Sudhir Singh crepantherx@gmail.com
 @version	1.1
 ```
 ___
-#### Project Structure
-
-```.
-└── SQL
-    └── Trigger
-```
