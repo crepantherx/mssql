@@ -21,3 +21,4 @@ SELECT CAST(GETDATE() AS DATE) AS gettingDateOnly;
 SELECT CONVERT(DATE, GETDATE(),105) AS gettingDateOnly;
 
 
+---let do something else
