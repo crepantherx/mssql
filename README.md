@@ -10,7 +10,7 @@
 
 
 ```
-@project    SQL
+@project    SQL Server
 @author     Sudhir Singh 
 @email      crepantherx@gmail.com
 ```
