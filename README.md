@@ -1,5 +1,5 @@
 ##### Resources <br />
-- [SQL Server Official Documentation](https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15) <br />
+- [```SQL Server Official Documentation```](https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15) <br />
 - [A website for SQL Server](https://www.sqlservertutorial.net/)  <br />
 - [ER Diagram Visualization](https://sqldbm.com/Home/) <br />
 - [Normalization](https://www.essentialsql.com/database-normalization/) <br />
