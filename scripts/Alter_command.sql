@@ -23,7 +23,7 @@ ALTER COLUMN roll_number int NOT NULL;
 
 --to drop an existing column from the table using ALTER command
 ALTER TABLE Student 
-DROP COLUMN marks_obtained;
+DROP column marks_obtained;
 
 --to add primary key constraints using ALTER command
 ALTER TABLE Student
@@ -35,7 +35,8 @@ DROP CONSTRAINT pk_roll_num
 
 --to add foreign key Constraints using alter command
 ALTER TABLE Marks
-ADD Constraint fk_roll_num FOREIGN KEY (roll_number) REFERENCES Student (roll_number)
+ADD Constraint fk_roll_num FOREIGN KEY (roll_number) 
+REFERENCES Student (roll_number)
 
 --to drop foreign key Constraint using Alter command:
 ALTER TABLE Marks 
@@ -62,9 +63,7 @@ SELECT * FROM Student
 
 
 
-ADD
-DROP
-ADD 
+
 
 
 
