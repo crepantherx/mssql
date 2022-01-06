@@ -196,4 +196,96 @@ END CATCH
 
 SELECT * FROM temp
 
+------------------------------------------------------------Day 3
 
+SELECT * FROM temp
+
+INSERT INTO temp
+VALUES(5,NULL)
+
+ALTER TABLE temp
+WITH NOCHECK ADD CONSTRAINT n CHECK(name IS NOT NULL)
+
+
+----------------------subquery & correlated subquery
+
+SELECT * 
+FROM Employee.employees.employees
+
+SELECT * 
+FROM Employee.employees.dept_emp
+
+---------subquery
+SELECT * 
+FROM Employee.employees.employees 
+WHERE emp_no IN (SELECT DISTINCT emp_no FROM Employee.employees.dept_emp )
+
+--------correlated subquery
+SELECT * 
+FROM Employee.employees.employees e
+WHERE emp_no IN (SELECT DISTINCT emp_no FROM Employee.employees.dept_emp WHERE from_date = e.hire_date )
+
+
+-------------------------------Cursor
+
+DECLARE t_cursor CURSOR FOR
+SELECT * FROM temp
+
+OPEN t_cursor
+
+DECLARE @c_id INT
+DECLARE @c_name VARCHAR(25)
+FETCH NEXT FROM t_cursor INTO @c_id, @c_name
+
+WHILE(@@FETCH_STATUS = 0)
+BEGIN
+	PRINT CAST(@c_id AS NVARCHAR(5)) + '-' + @c_name
+	FETCH NEXT FROM t_cursor INTO @c_id, @c_name
+END
+
+CLOSE t_cursor
+DEALLOCATE t_cursor
+
+--------------------------------
+SELECT * FROM sys.tables
+---------------------------------
+
+IF OBJECT_ID('temp') IS NULL
+BEGIN
+	CREATE TABLE temp(
+		id INT,
+		name NVARCHAR(50)
+	)
+END
+ELSE
+BEGIN
+	PRINT 'Table already exists!'
+END
+
+--------------------------------------------Merge
+SELECT * FROM temp
+SELECT * FROM source
+
+CREATE TABLE source(
+	id INT,
+	name NVARCHAR(30)
+)
+
+INSERT INTO source
+VALUES(2,'sam'),(1,'ram'),(5,'rahul')
+
+
+MERGE temp AS t
+USING source AS s
+	ON t.id = s.id
+WHEN MATCHED THEN
+	UPDATE SET t.name = s.name
+WHEN NOT MATCHED BY TARGET THEN
+	INSERT (id,name) VALUES(s.id,s.name)
+WHEN NOT MATCHED BY SOURCE THEN
+ DELETE;
+ 
+-------------------------------------------
+
+SET TRAN ISOLATION LEVEL READ UNCOMMITTED 
+SELECT * FROM temp (NOLOCK)
