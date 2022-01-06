@@ -1,3 +1,6 @@
+
+--Analytical and ranking functions----
+
 SELECT * FROM employees.employees
 SELECT emp_no,name,gender,  
 FIRST_VALUE(name) OVER(PARTITION BY gender ORDER BY emp_no ROWS BETWEEN UNBOUNDED PRECEDING 
