@@ -409,3 +409,128 @@ create unique clustered index uix_t3_id on t3(id);--will show error
 
 alter table t3
 add constraint uq_t3_id UNIQUE(id) where id > 6;--will show error
+
+/*
+07-01-2022
+Employees Database Task
+*/
+
+--creating database
+create database TEmployee;
+
+--using it
+use TEmployee;
+
+
+--to create a schema use-> create schema schemaName
+go
+create schema temployees;
+
+--to check schemas
+go
+select * from sys.schemas;
+
+/*
+creating tables whose columns are used as foreign keys in other tables
+order of creating tables
+temployees.employees
+temployees.salaries
+temployees.titles
+temployees.departments
+temployees.dept_manager
+temployees.dept_emp
+*/
+
+/*
+creating main table employees, because it is used as foreign keys in other tables, we have to create it firt in order to reference it first
+primary key on emp_no
+which will be referenced by other tables.
+*/
+go
+create table temployees.employees(
+	emp_no int,
+	birth_date date not null,
+	first_name nvarchar(15) not null,
+	last_name nvarchar(15) not null,
+	gender nvarchar(1) not null,
+	hire_date date not null,
+	constraint pk_employees_empno  PRIMARY KEY(emp_no)
+);
+/*
+creating table for salaries, 
+having primary key as combination  of emp_no and from_date
+and foreign key on emp_no from employees table 
+*/
+go
+create table temployees.salaries(
+	emp_no int,
+	from_date date,
+	salary int not null,
+	to_date date not null,
+	constraint pk_salaries_empno_fromdate primary key(emp_no, from_date),
+	constraint fk_salaries_employees_empno foreign key(emp_no) references temployees.employees(emp_no)
+);
+
+
+/*
+creating table for employees titles
+having primary key on the combination of 3 columns-> emp_no, title, from_date
+having foreign key on emp_no from employees table
+*/
+create table temployees.titles(
+	emp_no int,
+	title nvarchar(50),
+	from_date date,
+	to_date date not null,
+	constraint pk_titles_empno_title_fromdate primary key(emp_no, title, from_date),
+	constraint fk_titles_employees_emp_no foreign key(emp_no) references temployees.employees(emp_no)
+);
+
+
+/*
+creating table for departmens, before creating table for dept_emp and dept_manager
+having primary key as dept_no
+having unique constraint on dept_name
+*/
+create table temployees.departments(
+	dept_no nchar(4),
+	dept_name nvarchar(40) not null,
+	constraint pk_departments_dept_no primary key(dept_no),
+	constraint uq_departments_dept_name unique(dept_name)
+);
+
+/*
+creating table for department managers
+primary key on columns emp_no and dept_no
+foreign key on emp_no from employees
+foreing key on dept_no from departments
+*/
+create table temployees.dept_manager(
+	emp_no int,
+	dept_no nchar(4),
+	from_date date not null,
+	to_date date not null,
+	constraint pk_deptmanager_empno_deptno primary key(emp_no, dept_no),
+	constraint fk_deptmanager_employees_empno foreign key(emp_no) references temployees.employees(emp_no),
+	constraint fk_deptmanager_departments_deptno foreign key(dept_no) references temployees.departments(dept_no)
+);
+
+/*
+creating table for details regarding each employee and their department
+primary key on columns emp_no and dept_no
+foreign key on emp_no from employees
+foreing key on dept_no from departments
+*/
+create table temployees.dept_emp(
+	emp_no int,
+	dept_no nchar(4),
+	from_date date not null,
+	to_date date not null,
+	constraint pk_deptemp_empno_deptno primary key(emp_no, dept_no),
+	constraint fk_deptemp_employees_empno foreign key(emp_no) references temployees.employees(emp_no),
+	constraint fk_deptemp_departments_deptno foreign key(dept_no) references temployees.departments(dept_no)
+);
+
+
+
+
