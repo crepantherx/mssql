@@ -131,7 +131,6 @@ where name like '#t6%';
 
 /*
 05-01-2021
-
 */
 
 select isdate('string'); -- returns 0 i.e false
@@ -410,19 +409,3 @@ create unique clustered index uix_t3_id on t3(id);--will show error
 
 alter table t3
 add constraint uq_t3_id UNIQUE(id) where id > 6;--will show error
-
-
----cheking updated_
-
-
-
-
-
-
-
-
-
-
-
-
-
