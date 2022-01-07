@@ -412,7 +412,7 @@ from ForWindowsFunction;
 
 
 
-----------------------------------------------------------------------------DAY 3
+-----------------------------------------------------------------------------------------DAY 3
 
 ---Transaction in sql server and Error Handling
 
@@ -800,3 +800,343 @@ Group By
 	()				   --Grand Total
  )
  order by Grouping(Country), Grouping(Gender),Gender
+
+
+ --------------------------------------------------------------------------------------Day 4
+-- Task : Implementing ER-Diagram
+-- Other: Worked on Pivot and Unpivot 
+ 
+/*
+
+Name  : EmployeesDatabase
+
+*/
+
+--create database
+CREATE DATABASE EmployeesDatabase;
+GO
+
+USE EmployeesDatabase;
+go
+
+--create schemas
+CREATE SCHEMA Employees
+go
+
+
+--create tables
+CREATE TABLE [Employees].[employees] (
+	[emp_no] INT PRIMARY KEY,
+	[birth_date] DATE NOT NULL,
+	[first_name] varchar(14) NOT NULL,
+	[last_name] varchar(16) NOT NULL,
+	[gender] varchar(1) NOT NULL CHECK (gender IN ('M','F')),
+	[hire_date] DATE NOT NULL
+);
+
+
+
+CREATE TABLE [Employees].[titles] (
+	[emp_no] INT NOT NULL,
+	[title] varchar(50) NOT NULL,
+	[from_date] DATE NOT NULL ,
+	[to_date] DATE DEFAULT (NULL)
+	CONSTRAINT pk_titles PRIMARY KEY (emp_no,title,from_date)
+	FOREIGN KEY (emp_no) REFERENCES Employees.employees (emp_no)
+);
+
+
+CREATE TABLE [Employees].[salaries] (
+	[emp_no] INT NOT NULL,
+	salary INT NOT NULL,
+	from_date DATE NOT NULL,
+	to_date DATE NOT NULL
+	CONSTRAINT PK_salaries PRIMARY KEY (emp_no,from_date)
+	FOREIGN KEY (emp_no) REFERENCES Employees.employees (emp_no)
+);
+
+
+
+CREATE TABLE [Employees].[dept_emp] (
+	[emp_no] INT NOT NULL,
+	dept_no nchar(4) NOT NULL,
+	from_date DATE NOT NULL,
+	to_date DATE NOT NULL
+	CONSTRAINT PK_dept_emp PRIMARY KEY (emp_no,dept_no)
+	FOREIGN KEY (emp_no) REFERENCES Employees.employees (emp_no)
+);
+
+
+CREATE TABLE [Employees].[departments] (
+	dept_no nchar(4) NOT NULL,
+	dept_name varchar(40) NOT NULL
+	CONSTRAINT PK_DEPARTMENT PRIMARY KEY (dept_no)
+);
+
+
+CREATE TABLE [Employees].[dept_manager] (
+	emp_no INT NOT NULL,
+	dept_no nchar(4) NOT NULL,
+	from_date DATE NOT NULL,
+	to_date DATE NOT NULL,
+	CONSTRAINT PK_DEPT_MANAGER PRIMARY KEY (dept_no,emp_no),
+	FOREIGN KEY (emp_no) REFERENCES Employees.employees (emp_no),
+	FOREIGN KEY (dept_no) REFERENCES Employees.departments (dept_no)
+);
+
+---------------Pivot and Un-pivot
+
+---Understanding pivot properly
+
+--pivot---rows to column
+--unpivot --columns to rows
+
+
+
+SELECT 
+    category_name, 
+    COUNT(product_id) product_count
+FROM 
+    production.products p
+    INNER JOIN production.categories c 
+        ON c.category_id = p.category_id
+GROUP BY 
+    category_name;
+
+
+
+	SELECT 
+    category_name, 
+    product_id
+FROM 
+    production.products p
+    INNER JOIN production.categories c 
+        ON c.category_id = p.category_id
+
+
+--Step 1: - Making Derive table
+
+SELECT * FROM (
+SELECT 
+	category_name, 
+    product_id
+FROM 
+    production.products p
+	INNER JOIN production.categories c 
+    ON c.category_id = p.category_id
+) t
+
+
+--Step 2: --apply pivot
+
+SELECT * FROM (
+SELECT 
+	category_name, 
+    product_id
+FROM 
+    production.products p
+	INNER JOIN production.categories c 
+    ON c.category_id = p.category_id
+) t
+pivot
+(
+	count(product_id)
+	FOR category_name IN(
+	    [Children Bicycles], 
+        [Comfort Bicycles], 
+        [Cruisers Bicycles], 
+        [Cyclocross Bicycles], 
+        [Electric Bikes], 
+        [Mountain Bikes], 
+        [Road Bikes])
+) as pivot_table
+
+
+
+SELECT * FROM (
+SELECT 
+	category_name, 
+    product_id,
+	model_year
+FROM 
+    production.products p
+	INNER JOIN production.categories c 
+    ON c.category_id = p.category_id
+) t
+pivot
+(
+	count(product_id)
+	FOR category_name IN(
+	    [Children Bicycles], 
+        [Comfort Bicycles], 
+        [Cruisers Bicycles], 
+        [Cyclocross Bicycles], 
+        [Electric Bikes], 
+        [Mountain Bikes], 
+        [Road Bikes])
+) as pivot_table
+
+
+--------------------------Second Example
+use assessment
+
+
+CREATE TABLE Grades(
+  Student VARCHAR(50),
+  Subject VARCHAR(50),
+  Marks   INT
+)
+go
+ 
+INSERT INTO Grades VALUES 
+('Jacob','Mathematics',100),
+('Jacob','Science',95),
+('Jacob','Geography',90),
+('Amilee','Mathematics',90),
+('Amilee','Science',90),
+('Amilee','Geography',100)
+go
+
+
+SELECT * FROM
+(SELECT 
+	[Student],
+	[Subject],
+	[Marks]
+FROM Grades) t
+PIVOT
+(
+	SUM([Marks])
+	FOR [Subject] IN ([Mathematics],[Science],[Geography])
+
+) AS pivot_table
+
+SELECT * FROM Grades;
+
+CREATE TABLE Grades2(
+  Student VARCHAR(50),
+  Subject VARCHAR(50),
+  Marks   INT
+)
+
+INSERT INTO Grades2 VALUES 
+('Jacob','Mathematics',100),
+('Jacob','Science',95),
+('Jacob','Geography',90);
+
+select * from Grades2;
+
+select * from
+(select student,Subject,Marks from Grades2) AS T
+PIVOT
+(
+	SUM(Marks)---------------------------------------------Aggregate function is mandatory here but why ? if we have only distinct records then.
+	FOR Subject IN (Mathematics,Science,Geography)
+) AS pivot_table
+
+
+
+------Unpivot
+
+-- Create the table and insert values as portrayed in the previous example.  
+CREATE TABLE pvt (VendorID INT, Emp1 INT, Emp2 INT,  
+    Emp3 INT, Emp4 INT, Emp5 INT);  
+go
+
+
+INSERT INTO pvt VALUES (1,4,3,5,4,4);  
+INSERT INTO pvt VALUES (2,4,1,5,5,5);  
+INSERT INTO pvt VALUES (3,4,3,5,4,4);  
+INSERT INTO pvt VALUES (4,4,2,5,5,4);  
+INSERT INTO pvt VALUES (5,5,1,5,5,5);  
+go
+
+-- Unpivot the table.  
+
+
+SELECT VendorID, Employee, Orders from
+(SELECT VendorID,Emp1,Emp2,Emp3,Emp4,Emp5
+ FROM pvt) p
+ UNPIVOT
+ (
+	Orders
+	FOR Employee IN (Emp1,Emp2,Emp3,Emp4,Emp5)
+ ) AS unpvt
+
+ select * from pvt;
+
+
+
+ ----------------third Example  ( Reversing a pivot) Reversing  Aggregated Pivoted table
+
+--pivot
+CREATE TABLE Students
+(
+	Id INT PRIMARY KEY IDENTITY,
+	StudentName VARCHAR (50),
+	Course VARCHAR (50),
+	Score INT
+)
+
+INSERT INTO Students VALUES ('Sally', 'English', 95 )
+INSERT INTO Students VALUES ('Sally', 'History', 82)
+INSERT INTO Students VALUES ('Edward', 'English', 45)
+INSERT INTO Students VALUES ('Edward', 'History', 78)
+
+
+SELECT * FROM Students;
+
+---REVERSING NON-AGGREGATES PIVOTED TABLE
+
+SELECT StudentName,Course,Score FROM
+(select * from 
+(select StudentName,Course,Score from Students) t
+pivot
+(
+	sum(Score)
+	FOR Course IN (English,History)
+) as pivottable) PivotedResult
+UNPIVOT
+(
+	score
+	FOR Course IN (English,History)
+
+) AS unpivoted
+
+
+----REVERSING AGGREGATED PIVOTED TABLE
+
+INSERT INTO Students VALUES ('Edward', 'History', 78)
+
+SELECT Id, StudentName, English, History
+FROM Students
+PIVOT
+(
+	SUM (Score)
+	FOR Course in (English, History)
+) AS Schoolpivot
+
+
+
+
+SELECT StudentName, Course, Score
+FROM
+(SELECT * FROM
+ 
+(SELECT 
+	StudentName,
+	Score,
+	Course
+FROM 
+	Students
+)
+AS StudentTable
+PIVOT(
+	SUM(Score)
+	FOR Course IN ([English],[History])
+) AS SchoolPivot) PivotedResults
+UNPIVOT
+(
+	Score
+	FOR Course in (English, History)
+) AS Schoolunpivot
