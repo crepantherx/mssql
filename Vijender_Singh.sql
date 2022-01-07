@@ -412,7 +412,7 @@ alter table t3
 add constraint uq_t3_id UNIQUE(id) where id > 6;--will show error
 
 
-
+---cheking updated_
 
 
 
