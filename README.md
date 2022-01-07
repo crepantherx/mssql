@@ -1,4 +1,5 @@
 ##### Resources <br />
+[```SQL Statement```](https://docs.microsoft.com/en-us/sql/t-sql/statements/statements?view=sql-server-ver15)
 [```SQL Server Official Documentation```](https://docs.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver15) <br />
 [```A website for SQL Server```](https://www.sqlservertutorial.net/)  <br />
 [```ER Diagram Visualization```](https://sqldbm.com/Home/) <br />

@@ -1,0 +1,6 @@
+Unicode data types
+If you store character data that reflects multiple languages in SQL Server (SQL Server 2005 (9.x) and later), use Unicode data types (nchar, nvarchar, and ntext) instead of non-Unicode data types (char, varchar, and text).
+
+It's common to think, in CHAR(n) and VARCHAR(n) or in NCHAR(n) and NVARCHAR(n), that n defines the number of characters. This is because, in the example of a CHAR(10) column, 10 ASCII characters in the range 0–127 can be stored by using a collation such as Latin1_General_100_CI_AI, because each character in this range uses only 1 byte.
+
+However, in CHAR(n) and VARCHAR(n), n defines the string size in bytes (0–8,000), and in NCHAR(n) and NVARCHAR(n), n defines the string size in byte-pairs (0–4,000). n never defines numbers of characters that can be stored.
