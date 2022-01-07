@@ -289,3 +289,115 @@ WHEN NOT MATCHED BY SOURCE THEN
 
 SET TRAN ISOLATION LEVEL READ UNCOMMITTED 
 SELECT * FROM temp (NOLOCK)
+
+-------------------------------------------------------------------------Day3
+
+CREATE DATABASE Employee1
+
+CREATE TABLE employees(
+	emp_no INT PRIMARY KEY,
+	birth_date DATE NOT NULL,
+	first_name NVARCHAR(14) NOT NULL,
+	last_name NVARCHAR(16) NOT NULL,
+	gender NVARCHAR(1) NOT NULL CHECK(gender IN ('F','M')),
+	hire_date DATE	NOT NULL
+)
+
+SELECT * FROM employees
+
+CREATE TABLE salaries(
+	emp_no INT NOT NULL FOREIGN KEY REFERENCES employees(emp_no),
+	salary INT NOT NULL,
+	from_date DATE NOT NULL,
+	to_date DATE NOT NULL,
+	CONSTRAINT Pk_salaries_emp_no PRIMARY KEY(emp_no, from_date)
+)
+
+CREATE TABLE titles(
+	emp_no INT FOREIGN KEY REFERENCES employees(emp_no),
+	titles NVARCHAR(50),
+	from_date DATE,
+	to_date DATE,
+	CONSTRAINT PK_titles_emp_no PRIMARY KEY(emp_no, titles,from_date)
+)
+
+CREATE TABLE departments(
+	dept_no NVARCHAR(4) PRIMARY KEY,
+	dept_name NVARCHAR(40) NOT NULL
+)
+
+CREATE TABLE dept_emp(
+	emp_no INT FOREIGN KEY REFERENCES employees(emp_no),
+	dept_no NVARCHAR(4) FOREIGN KEY REFERENCES departments(dept_no),
+	from_date DATE NOT NULL,
+	to_date DATE NOT NULL,
+	CONSTRAINT PK_dept_no_emp_no PRIMARY KEY(emp_no, dept_no)
+)
+
+CREATE TABLE dept_manager(
+	dept_no NVARCHAR(4) FOREIGN KEY REFERENCES departments(dept_no),
+	emp_no INT FOREIGN KEY REFERENCES employees(EMP_NO),
+	from_date DATE NOT NULL,
+	to_date DATE NOT NULL,
+	CONSTRAINT PK_emp_no_dept_no PRIMARY KEY(dept_no,emp_no)
+)
+
+DROP TABLE dept_manager
+
+SP_HELP salaries
+
+-------------------------------------------------------------------nth salary
+
+SELECT * FROM Employee.employees.salaries
+
+SELECT TOP 1 salary
+FROM
+(
+SELECT DISTINCT TOP 2 salary                -----nth
+FROM Employee.employees.salaries
+ORDER BY salary DESC
+) result
+ORDER BY salary
+
+------------------------------row_number
+
+WITH cte AS(
+	SELECT TOP 20 e.emp_no, s.salary, e.gender
+	FROM Employee.employees.employees e
+	JOIN Employee.employees.salaries s
+	ON e.emp_no = s.emp_no
+)
+
+SELECT emp_no, salary, gender,
+	ROW_NUMBER() OVER(PARTITION BY gender 
+						ORDER BY salary DESC)
+FROM cte
+
+CREATE TABLE #temp(
+	name NVARCHAR(25),
+	salary INT,
+	gender NVARCHAR(1)
+)
+
+INSERT INTO #temp
+VALUES('ram',1000,'M'),('chinki',1000,'F'),('pinky',1000,'F'),('chintu',2000,'M'),('viru',1000,'M'),('sam',800,'M')
+
+SELECT name, salary, gender,
+	ROW_NUMBER() OVER(PARTITION BY gender 
+						ORDER BY salary DESC) row
+FROM #temp
+
+SELECT name, salary, gender,
+	RANK() OVER(PARTITION BY gender 
+						ORDER BY salary DESC) rank
+FROM #temp
+
+SELECT name, salary, gender,
+	DENSE_RANK() OVER(PARTITION BY gender 
+						ORDER BY salary DESC) d_rank
+FROM #temp
+
+SELECT name, salary, gender,
+	NTILE(2) OVER(PARTITION BY gender 
+						ORDER BY salary DESC) ntile
+FROM #temp
