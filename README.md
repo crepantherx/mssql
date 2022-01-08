@@ -11,11 +11,8 @@
 
 
 ```
-@project    SQL Server Script Maintenance
+@project    SQL Server 
 @author     Sudhir Singh 
 @email      crepantherx@gmail.com
-```
-
-```
 @version    2021.L
 ```
