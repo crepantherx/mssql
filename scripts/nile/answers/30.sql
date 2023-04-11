@@ -5,4 +5,4 @@ AND BusinessEntityID IN
     (SELECT BusinessEntityID
      FROM Purchasing.ProductVendor
      WHERE MinOrderQty >= 20
-     AND AverageLeadTime < 16);
+     AND AverageLeadTime < 16)
