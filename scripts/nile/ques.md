@@ -57,4 +57,7 @@ Write a function that takes one input value, a ProductID, and returns a single d
 Write a function that takes one input parameter, a customer (store) ID, and returns the columns ProductID, Name, and the aggregate of year-to-date sales as YTD Total for each product sold to the store
 Write a query for the person in charge of tracking work anniversaries but without giving this person access to all the data in the tables
 Write a query to show the total number of sales orders per year for each sales representative at Adventure Works Cycles
-Write a query to show the sales representatives' average number of sales orders for all years.
+Write a query to show the sales representatives average number of sales orders for all years.
+Create NONCLUSTERED and clustered index in sql
+Show an example of scaler functions,table valued function,multistatement table valued function
+Show an example of cast and convert
