@@ -24,7 +24,7 @@ Write a query to print maxunitprice of sales (use subquery)
 Write a query to show all the products having same price as ‘Chainring Bolts’
 Write a query to print name of all the sale’s stores where customers are not from southeast US
 Write a query finds the names of employees who are also sales persons.
- Write a query retrieves one instance of each employee's first and last name for which the bonus in the SalesPerson table is 5000
+ Write a query that    retrieves one instance of each employee's first and last name for which the bonus in the SalesPerson table is 5000
 Write a query to find addresses of employees from a particular state
 Write a query to find the names of all the wheel products that Adventure Works Cycles makes
 Write a query to find the name of all vendors whose credit rating is good, from whom Adventure Works Cycles orders at least 20 items, and whose average lead time to deliver is less than 16 days.
@@ -36,8 +36,7 @@ Write a query to find customers located in a territory not covered by any salesp
 Write a query to find the names of all products that are in the Wheels subcategory
 Write a query to find the names of products that aren't in the wheels subcategory
 Write a query to find the prices of all mountain bike products, their average price, and the difference between the price of each mountain bike and the average price
-Write an example to show the four ranking functions used in the same query
-Functions
+Write an example to show the four ranking functions used in the same query Functions
 Write a query to calculate the average vacation hours, and the sum of sick leave hours, that the vice presidents of Adventure Works Cycles have used
 Write a query to calculate summary values for each sales territory in the AdventureWorks2019 database.
 Write a query to find the number of different jobtitles that an Adventure Works Cycles employee can hold
