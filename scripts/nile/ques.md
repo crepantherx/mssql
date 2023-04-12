@@ -60,4 +60,11 @@ Write a query to show the total number of sales orders per year for each sales r
 Write a query to show the sales representatives average number of sales orders for all years.
 Create NONCLUSTERED and clustered index in sql
 Show an example of scaler functions,table valued function,multistatement table valued function
-Show an example of cast and convert
+Show examples of cast and convert
+Show examples of date & time
+Show examples of functions and statements that can be used with ntext,text,image data
+Show examples of bit manipulation functions
+Show examples of analytic functions
+Show examples of collation
+Show examples of cursors
+Show examples of Pivot and Unpivot
